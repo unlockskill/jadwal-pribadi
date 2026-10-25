@@ -184,24 +184,25 @@
       <div id="date">Memuat tanggal...</div>
     </section>
 
-    <!-- Jadwal salat SIHAT -->
-    <section>
-      <h1 class="section-title">Jadwal Waktu Salat</h1>
+    
+<!-- Jadwal salat Kemenag -->
+<section>
+  <h1 class="section-title">Jadwal Waktu Salat</h1>
 
-      <div class="prayer-card">
-        <iframe
-          src="https://sihat.kemenag.dev/widget/jadwal?wilayah=367406"
-          title="Jadwal Salat — SIHAT Kementerian Agama RI"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+  <div class="prayer-card" id="prayer-card">
+    <div style="padding:24px;background:#111a2c;color:#f1f5f9">
+      <p style="color:#d6b56d">Pamulang · Tangerang Selatan · WIB</p>
+      <p id="prayer-date">Memuat jadwal salat...</p>
+      <div id="prayer-times">
+        Mohon tunggu, jadwal sedang dimuat.
       </div>
+    </div>
+  </div>
 
-      <p class="prayer-note">
-        Jadwal ditampilkan melalui widget SIHAT Bimas Islam.
-        Pastikan wilayah widget sesuai dengan Tangerang Selatan.
-      </p>
-    </section>
+  <p class="prayer-note">
+    Sumber jadwal: Kementerian Agama RI, Bimas Islam.
+  </p>
+</section>
 
     <!-- Jadwal aktivitas -->
     <section>
@@ -261,6 +262,94 @@ document.getElementById("date").textContent =
 
     updateClock();
     setInterval(updateClock, 1000);
+    
+function getJakartaISODate() {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(new Date());
+
+  const part = (type) =>
+    parts.find((item) => item.type === type).value;
+
+  return `${part("year")}-${part("month")}-${part("day")}`;
+}
+
+async function loadPrayerTimes() {
+  const date = getJakartaISODate();
+  const year = date.slice(0, 4);
+  const dateEl = document.getElementById("prayer-date");
+  const timesEl = document.getElementById("prayer-times");
+
+  try {
+    const url =
+      `https://sajadah.org/api/v1/times/id/kota-tangerang-selatan/${year}.json`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Jadwal tidak tersedia");
+    }
+
+    const data = await response.json();
+    const dateIndex = data.fields.indexOf("date");
+
+    const row = data.days.find(
+      (day) => day[dateIndex] === date
+    );
+
+    if (!row) {
+      throw new Error("Tanggal tidak ditemukan");
+    }
+
+    const timeFor = (key) => {
+      const index = data.fields.indexOf(key);
+      return index >= 0 ? row[index] : null;
+    };
+
+    const tanggalTampil = new Intl.DateTimeFormat("id-ID", {
+      timeZone: "Asia/Jakarta",
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    })
+      .format(new Date(`${date}T12:00:00+07:00`))
+      .replace(/^Minggu/, "Ahad");
+
+    dateEl.textContent = `${tanggalTampil} · WIB`;
+
+    const prayers = [
+      ["Subuh", "fajr"],
+      ["Zuhur", "dhuhr"],
+      ["Asar", "asr"],
+      ["Magrib", "maghrib"],
+      ["Isya", "isha"]
+    ];
+
+    timesEl.innerHTML = prayers.map(([label, key]) => {
+      const time = timeFor(key);
+
+      if (!time) return "";
+
+      return `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid #293750">
+          <span style="color:#e2e8f0">${label}</span>
+          <strong style="color:#f1dca3">${time}</strong>
+        </div>
+      `;
+    }).join("");
+  } catch (error) {
+    dateEl.textContent = "Jadwal salat belum dapat dimuat.";
+    timesEl.textContent =
+      "Periksa koneksi internet, lalu muat ulang halaman.";
+  }
+}
+
+loadPrayerTimes();
+
   </script>
 </body>
 </html>
