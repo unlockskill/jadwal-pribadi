@@ -186,7 +186,7 @@
 
     
 <!-- Jadwal salat Kemenag -->
-<section>
+<section data-prayer-fixed>
   <h1 class="section-title">Jadwal Waktu Salat</h1>
 
   <div class="prayer-card" id="prayer-card">
@@ -204,8 +204,8 @@
   </p>
 </section>
 
-    <!-- Jadwal aktivitas -->
-    <section>
+    <!-- Konten Beranda -->
+<section data-content-page="beranda">
       <h2 class="section-title">Jadwal Aktivitas Kita</h2>
 
       <p class="activity-intro">
@@ -227,6 +227,52 @@
         </span>
       </div>
     </section>
+
+    
+<section data-content-page="kajian" style="display:none">
+  <h2 class="section-title">Jadwal Kajian</h2>
+
+  <div class="empty-state">
+    <div class="empty-icon">📖</div>
+    <strong>Catatan Kajian Kita</strong>
+    <p>
+      Tempat untuk mencatat jadwal kajian, nama ustadz,
+      lokasi, dan materi yang ingin dipelajari.
+    </p>
+    <span class="coming-soon">Fitur kajian akan dikembangkan berikutnya</span>
+  </div>
+</section>
+
+    
+<section data-content-page="olahraga" style="display:none">
+  <h2 class="section-title">Jadwal Olahraga</h2>
+
+  <div class="empty-state">
+    <div class="empty-icon">💪</div>
+    <strong>Target Olahraga Kita</strong>
+    <p>
+      Tempat untuk menyusun latihan harian,
+      mencatat target, dan memantau konsistensi olahraga.
+    </p>
+    <span class="coming-soon">Fitur olahraga akan dikembangkan berikutnya</span>
+  </div>
+</section>
+
+    
+<section data-content-page="aktivitas" style="display:none">
+  <h2 class="section-title">Aktivitas Harian</h2>
+
+  <div class="empty-state">
+    <div class="empty-icon">📅</div>
+    <strong>Rencana Aktivitas Kita</strong>
+    <p>
+      Tempat untuk mengatur kegiatan harian,
+      waktu makan, bekerja, belajar, dan istirahat.
+    </p>
+    <span class="coming-soon">Fitur aktivitas akan dikembangkan berikutnya</span>
+  </div>
+</section>
+
 
     <footer>
       بسم الله الرحمن الرحيم<br>
@@ -352,6 +398,92 @@ return `
 
 loadPrayerTimes();
 
+
+function showPage(page) {
+  document.querySelectorAll("[data-content-page]").forEach((section) => {
+    section.style.display =
+      section.dataset.contentPage === page ? "" : "none";
+  });
+
+  document.querySelectorAll(".nav-item").forEach((item) => {
+    const active = item.dataset.page === page;
+
+    item.classList.toggle("active", active);
+    item.setAttribute("aria-current", active ? "page" : "false");
+  });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  showPage("beranda");
+});
+
   </script>
+  
+<nav id="bottom-nav" style="
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  padding:10px 4px calc(10px + env(safe-area-inset-bottom));
+  background:#111a2c;
+  border-top:1px solid #34415a;
+  z-index:9999;
+  box-sizing:border-box;
+">
+  <button onclick="showPage('beranda')" class="nav-item" data-page="beranda">
+    <span>⌂</span>
+    <small>Beranda</small>
+  </button>
+  <button onclick="showPage('kajian')" class="nav-item" data-page="kajian">
+    <span>▤</span>
+    <small>Kajian</small>
+  </button>
+  <button onclick="showPage('olahraga')" class="nav-item" data-page="olahraga">
+    <span>◉</span>
+    <small>Olahraga</small>
+  </button>
+  <button onclick="showPage('aktivitas')" class="nav-item" data-page="aktivitas">
+    <span>☷</span>
+    <small>Aktivitas</small>
+  </button>
+</nav>
+
+<style>
+  .nav-item {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    color: #b9c5d8;
+    padding: 6px 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+
+  .nav-item span {
+    font-size: 23px;
+  }
+
+  .nav-item small {
+    font-size: 11px;
+  }
+
+  .nav-item.active {
+    color: #f1dca3;
+  }
+
+  body {
+    padding-bottom: 85px;
+  }
+</style>
+
 </body>
 </html>
