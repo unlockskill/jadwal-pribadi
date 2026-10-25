@@ -170,7 +170,7 @@
         بسم الله الرحمن الرحيم
       </div>
       <div class="basmalah-note">
-        JADWAL AKTIVITAS KITA
+        JADWAL AKTIVITAS RIO & SUCI
       </div>
     </header>
 
@@ -247,14 +247,16 @@
           hour12: false
         }).format(now);
 
-      document.getElementById("date").textContent =
-        new Intl.DateTimeFormat("id-ID", {
-          timeZone: "Asia/Jakarta",
-          weekday: "long",
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        }).format(now);
+      const tanggal = new Intl.DateTimeFormat("id-ID", {
+  timeZone: "Asia/Jakarta",
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric"
+}).format(now);
+
+document.getElementById("date").textContent =
+  tanggal.replace(/^Minggu/, "Ahad");
     }
 
     updateClock();
