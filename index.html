@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d1a">
+  <title>Jadwal Aktivitas Kita</title>
+
+  <style>
+    :root {
+      --bg: #080d1a;
+      --panel: #111a2c;
+      --panel-light: #17243a;
+      --border: #293750;
+      --text: #f1f5f9;
+      --muted: #9caac0;
+      --gold: #d6b56d;
+      --gold-light: #f1dca3;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .basmalah {
+      text-align: center;
+      padding: 24px 12px 28px;
+      margin-bottom: 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .arabic {
+      font-family: "Noto Naskh Arabic", "Amiri",
+        "Traditional Arabic", serif;
+      font-size: clamp(27px, 6vw, 38px);
+      line-height: 1.8;
+      color: var(--gold-light);
+      direction: rtl;
+    }
+
+    .basmalah-note {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .clock-card {
+      background: linear-gradient(135deg, #17243a, #101629);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 24px;
+    }
+
+    .location {
+      color: var(--gold);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    #clock {
+      font-size: clamp(36px, 9vw, 54px);
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    #date {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .section-title {
+      font-size: 21px;
+      margin: 28px 0 14px;
+      color: var(--gold-light);
+    }
+
+    .prayer-card {
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .prayer-card iframe {
+      width: 100%;
+      height: 500px;
+      border: 0;
+      display: block;
+      background: #ffffff;
+    }
+
+    .prayer-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 10px;
+    }
+
+    .activity-intro {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .empty-state {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      text-align: center;
+    }
+
+    .empty-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .empty-state p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .coming-soon {
+      display: inline-block;
+      border: 1px solid #6d5a34;
+      color: var(--gold-light);
+      border-radius: 20px;
+      padding: 7px 12px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    footer {
+      text-align: center;
+      color: #738198;
+      font-size: 12px;
+      margin-top: 32px;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <!-- Basmalah -->
+    <header class="basmalah">
+      <div class="arabic" lang="ar">
+        بسم الله الرحمن الرحيم
+      </div>
+      <div class="basmalah-note">
+        JADWAL AKTIVITAS KITA
+      </div>
+    </header>
+
+    <!-- Jam dan tanggal WIB -->
+    <section class="clock-card">
+      <div class="location">
+        ◉ TANGERANG SELATAN · WIB
+      </div>
+
+      <div id="clock">00:00:00</div>
+      <div id="date">Memuat tanggal...</div>
+    </section>
+
+    <!-- Jadwal salat SIHAT -->
+    <section>
+      <h1 class="section-title">Jadwal Waktu Salat</h1>
+
+      <div class="prayer-card">
+        <iframe
+          src="https://sihat.kemenag.dev/widget/jadwal?wilayah=367406"
+          title="Jadwal Salat — SIHAT Kementerian Agama RI"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <p class="prayer-note">
+        Jadwal ditampilkan melalui widget SIHAT Bimas Islam.
+        Pastikan wilayah widget sesuai dengan Tangerang Selatan.
+      </p>
+    </section>
+
+    <!-- Jadwal aktivitas -->
+    <section>
+      <h2 class="section-title">Jadwal Aktivitas Kita</h2>
+
+      <p class="activity-intro">
+        Atur waktu ibadah, pekerjaan, belajar, olahraga,
+        dan aktivitas harian agar lebih terarah.
+      </p>
+
+      <div class="empty-state">
+        <div class="empty-icon">✦</div>
+        <strong>Mulai susun aktivitas kita</strong>
+
+        <p>
+          Bagian ini akan menjadi tempat untuk melihat,
+          menambahkan, dan menyelesaikan jadwal harian.
+        </p>
+
+        <span class="coming-soon">
+          Fitur aktivitas akan dibuat berikutnya
+        </span>
+      </div>
+    </section>
+
+    <footer>
+      بسم الله الرحمن الرحيم<br>
+      Jadwal Aktivitas Kita · Versi awal
+    </footer>
+
+  </main>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+
+      document.getElementById("clock").textContent =
+        new Intl.DateTimeFormat("id-ID", {
+          timeZone: "Asia/Jakarta",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false
+        }).format(now);
+
+      document.getElementById("date").textContent =
+        new Intl.DateTimeFormat("id-ID", {
+          timeZone: "Asia/Jakarta",
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        }).format(now);
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
