@@ -160,41 +160,65 @@
     }
 
     
-/* Tampilan ringkas pada menu selain Beranda */
-body.compact-view .basmalah {
-  display: none;
-}
 
+/* Jadwal salat mendatar untuk halaman selain Beranda */
+body.compact-view .basmalah,
 body.compact-view .clock-card {
   display: none;
 }
 
 body.compact-view [data-prayer-fixed] {
-  margin-top: 8px;
-  margin-bottom: 12px;
+  margin: 6px 0 12px;
+  padding: 8px;
+  background: #111a2c;
+  border: 1px solid #34415a;
+  border-radius: 12px;
 }
 
 body.compact-view [data-prayer-fixed] .section-title {
-  font-size: 16px;
-  margin-bottom: 8px;
+  font-size: 14px;
+  margin: 0 0 6px;
 }
 
 body.compact-view [data-prayer-fixed] .prayer-card > div {
-  padding: 10px !important;
+  padding: 0 !important;
+  background: transparent !important;
 }
 
 body.compact-view [data-prayer-fixed] #prayer-date {
-  font-size: 11px;
-  margin: 4px 0;
+  font-size: 10px;
+  margin: 0 0 6px;
+}
+
+body.compact-view [data-prayer-fixed] #prayer-times {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
 }
 
 body.compact-view [data-prayer-fixed] #prayer-times > div {
-  padding: 6px 10px !important;
-  margin: 4px 0 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+  margin: 0 !important;
+  padding: 6px 2px !important;
+  background: #fff;
+  border: 0 !important;
+  border-radius: 6px;
+  text-align: center;
+}
+
+body.compact-view [data-prayer-fixed] #prayer-times span {
+  color: #172033 !important;
+  font-size: 10px;
 }
 
 body.compact-view [data-prayer-fixed] #prayer-times strong {
-  font-size: 14px !important;
+  color: #172033 !important;
+  font-size: 11px !important;
 }
 
 body.compact-view [data-prayer-fixed] .prayer-note {
