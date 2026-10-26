@@ -159,41 +159,45 @@
       line-height: 1.8;
     }
 
-    
 
-/* Jadwal salat mendatar untuk halaman selain Beranda */
-body.compact-view .basmalah,
-body.compact-view .clock-card {
-  display: none;
-}
-
+/* Jadwal salat ringkas dan lebih mudah dibaca */
 body.compact-view [data-prayer-fixed] {
-  margin: 6px 0 12px;
-  padding: 8px;
+  margin: 6px 0 14px;
+  padding: 12px;
   background: #111a2c;
   border: 1px solid #34415a;
-  border-radius: 12px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
 }
 
 body.compact-view [data-prayer-fixed] .section-title {
-  font-size: 14px;
-  margin: 0 0 6px;
+  color: #f1dca3;
+  font-size: 16px;
+  margin: 0 0 8px;
 }
 
 body.compact-view [data-prayer-fixed] .prayer-card > div {
   padding: 0 !important;
   background: transparent !important;
+  color: #f1f5f9 !important;
+}
+
+body.compact-view [data-prayer-fixed] p[style] {
+  color: #cbd5e1 !important;
+  font-size: 11px;
+  margin: 0 0 6px;
 }
 
 body.compact-view [data-prayer-fixed] #prayer-date {
+  color: #94a3b8 !important;
   font-size: 10px;
-  margin: 0 0 6px;
+  margin: 0 0 8px;
 }
 
 body.compact-view [data-prayer-fixed] #prayer-times {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 4px;
+  gap: 6px;
 }
 
 body.compact-view [data-prayer-fixed] #prayer-times > div {
@@ -201,29 +205,33 @@ body.compact-view [data-prayer-fixed] #prayer-times > div {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 4px;
   min-width: 0;
   margin: 0 !important;
-  padding: 6px 2px !important;
-  background: #fff;
-  border: 0 !important;
-  border-radius: 6px;
+  padding: 9px 2px !important;
+  background: #f1f5f9;
+  border: 1px solid #dbe3ee !important;
+  border-radius: 9px;
   text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
 }
 
 body.compact-view [data-prayer-fixed] #prayer-times span {
-  color: #172033 !important;
+  color: #475569 !important;
   font-size: 10px;
+  font-weight: 600;
 }
 
 body.compact-view [data-prayer-fixed] #prayer-times strong {
   color: #172033 !important;
-  font-size: 11px !important;
+  font-size: 12px !important;
+  font-weight: 700;
 }
 
 body.compact-view [data-prayer-fixed] .prayer-note {
   display: none;
 }
+
 
   </style>
 </head>
