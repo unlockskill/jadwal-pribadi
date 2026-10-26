@@ -676,23 +676,6 @@ function selectKajianDay(day) {
 }
 
 function selectKajianTime(time) {
-  selectedKajianTime = time;
-
-  document.querySelectorAll(".time-button").forEach((button) => {
-    button.classList.toggle(
-      "selected",
-      button.getAttribute("onclick").includes(`'${time}'`)
-    );
-  });
-
-  document.getElementById("kajian-mosque-list").innerHTML =
-    `<p style="color:#cbd5e1;font-size:13px">
-      Pilihan: ${selectedKajianCity === "tangsel" ? "Tangerang Selatan" : "Jakarta"}
-      · ${selectedKajianDay} · ${selectedKajianTime}.
-      <br><br>Data masjid akan ditampilkan setelah kita menambahkan daftar kajian.
-    </p>`;
-}
-
 
   </script>
   
