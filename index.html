@@ -849,26 +849,28 @@ function selectKajianTime(time) {
           ${masjid.hari} · ${masjid.waktu}
         </p>
 
-  <a
-    href="${masjid.maps}"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Buka lokasi di Google Maps"
-    title="Google Maps"
-  >📍</a>
+        <div class="mosque-socials">
+          <a
+            href="${masjid.maps}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Buka lokasi di Google Maps"
+            title="Google Maps"
+          >📍</a>
 
-  ${masjid.instagram ? `
-    <a
-      href="${masjid.instagram}"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Buka Instagram masjid"
-      title="Instagram"
-    >◎</a>
-  ` : ""}
-</div>
-
+          ${masjid.instagram ? `
+            <a
+              href="${masjid.instagram}"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Buka Instagram masjid"
+              title="Instagram"
+            >◎</a>
+          ` : ""}
+        </div>
+      </div>
     </article>
+
   `).join("");
 }
 
