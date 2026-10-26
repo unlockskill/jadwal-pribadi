@@ -675,7 +675,74 @@ function selectKajianDay(day) {
   });
 }
 
+
 function selectKajianTime(time) {
+  selectedKajianTime = time;
+
+  document.querySelectorAll(".time-button").forEach((button) => {
+    button.classList.toggle(
+      "selected",
+      button.getAttribute("onclick").includes(`'${time}'`)
+    );
+  });
+
+  const hasil = daftarMasjidKajian.filter((masjid) => {
+    return (
+      masjid.kota === selectedKajianCity &&
+      masjid.hari === selectedKajianDay &&
+      masjid.waktu === selectedKajianTime
+    );
+  });
+
+  const wadah = document.getElementById("kajian-mosque-list");
+
+  if (hasil.length === 0) {
+    wadah.innerHTML = `
+      <p style="color:#cbd5e1;font-size:13px;line-height:1.6">
+        Belum ada data kajian untuk pilihan ini.
+        Data jadwal akan ditambahkan setelah dikonfirmasi.
+      </p>`;
+    return;
+  }
+
+  wadah.innerHTML = hasil.map((masjid) => `
+    <article class="mosque-card">
+      ${masjid.foto ? `
+        <img
+          class="mosque-photo"
+          src="${masjid.foto}"
+          alt="${masjid.nama}"
+          loading="lazy"
+        >
+      ` : ""}
+
+      <div class="mosque-card-body">
+        <h3 class="mosque-name">${masjid.nama}</h3>
+        <p class="mosque-address">${masjid.alamat}</p>
+
+        <p class="mosque-ustadz">
+          <strong>${masjid.ustadz}</strong>
+        </p>
+
+        <p class="mosque-material">
+          Materi: ${masjid.materi}
+        </p>
+
+        <p class="mosque-schedule">
+          ${masjid.hari} · ${masjid.waktu}
+        </p>
+
+        <a
+          class="mosque-maps"
+          href="${masjid.maps}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Buka Google Maps ↗</a>
+      </div>
+    </article>
+  `).join("");
+}
+
 
   </script>
   
