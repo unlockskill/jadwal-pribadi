@@ -239,6 +239,86 @@ body.compact-view [data-prayer-fixed] p[style] {
   display: none !important;
 }
 
+/* Tampilan halaman Kajian */
+.kajian-intro {
+  color: #cbd5e1;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.kajian-label {
+  color: #f1dca3;
+  font-size: 15px;
+  margin: 20px 0 10px;
+}
+
+.city-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.city-button,
+.day-button,
+.time-button {
+  border: 1px solid #34415a;
+  background: #17233b;
+  color: #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.city-button {
+  min-height: 68px;
+}
+
+.day-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.city-button:hover,
+.day-button:hover,
+.time-button:hover {
+  border-color: #d6bd7a;
+}
+
+.city-button.selected,
+.day-button.selected,
+.time-button.selected {
+  background: #d6bd7a;
+  color: #172033;
+  border-color: #d6bd7a;
+}
+
+#kajian-mosque-list {
+  margin-top: 20px;
+}
+
+@media (max-width: 360px) {
+  .day-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .city-button,
+  .day-button,
+  .time-button {
+    font-size: 12px;
+  }
+}
+
   </style>
 </head>
 
@@ -310,19 +390,48 @@ body.compact-view [data-prayer-fixed] p[style] {
     </section>
 
     
+
 <section data-content-page="kajian" style="display:none">
   <h2 class="section-title">Jadwal Kajian</h2>
+  <p class="kajian-intro">Temukan jadwal kajian berdasarkan kota, hari, dan waktu.</p>
 
-  <div class="empty-state">
-    <div class="empty-icon">📖</div>
-    <strong>Catatan Kajian Kita</strong>
-    <p>
-      Tempat untuk mencatat jadwal kajian, nama ustadz,
-      lokasi, dan materi yang ingin dipelajari.
-    </p>
-    <span class="coming-soon">Fitur kajian akan dikembangkan berikutnya</span>
+  <h3 class="kajian-label">Wilayah Kota</h3>
+  <div class="city-grid">
+    <button class="city-button" onclick="selectKajianCity('tangsel')">
+      📍 Tangerang Selatan
+    </button>
+    <button class="city-button" onclick="selectKajianCity('jakarta')">
+      📍 Jakarta
+    </button>
   </div>
+
+  <div id="kajian-day-area" hidden>
+    <h3 class="kajian-label">Pilih Hari</h3>
+    <div class="day-grid">
+      <button class="day-button" onclick="selectKajianDay('Ahad')">Ahad</button>
+      <button class="day-button" onclick="selectKajianDay('Senin')">Senin</button>
+      <button class="day-button" onclick="selectKajianDay('Selasa')">Selasa</button>
+      <button class="day-button" onclick="selectKajianDay('Rabu')">Rabu</button>
+      <button class="day-button" onclick="selectKajianDay('Kamis')">Kamis</button>
+      <button class="day-button" onclick="selectKajianDay('Jumat')">Jumat</button>
+      <button class="day-button" onclick="selectKajianDay('Sabtu')">Sabtu</button>
+    </div>
+  </div>
+
+  <div id="kajian-time-area" hidden>
+    <h3 class="kajian-label">Pilih Waktu Kajian</h3>
+    <div class="time-grid">
+      <button class="time-button" onclick="selectKajianTime('Subuh')">Kajian Subuh</button>
+      <button class="time-button" onclick="selectKajianTime('Dhuha')">Kajian Dhuha</button>
+      <button class="time-button" onclick="selectKajianTime('Ba’da Dzuhur')">Ba’da Dzuhur</button>
+      <button class="time-button" onclick="selectKajianTime('Ba’da Ashar')">Ba’da Ashar</button>
+      <button class="time-button" onclick="selectKajianTime('Ba’da Magrib')">Ba’da Magrib</button>
+    </div>
+  </div>
+
+  <div id="kajian-mosque-list"></div>
 </section>
+
 
     
 <section data-content-page="olahraga" style="display:none">
@@ -503,6 +612,87 @@ document.body.classList.toggle("compact-view", page !== "beranda");
 document.addEventListener("DOMContentLoaded", () => {
   showPage("beranda");
 });
+
+    
+const daftarMasjidKajian = [
+  {
+    id: 1,
+    kota: "tangsel",
+    nama: "Masjid As-Sunnah VCM",
+    alamat: "Kompleks Cinere Mas, Pisangan, Ciputat Timur, Tangerang Selatan",
+    foto: "",
+    ustadz: "Ustadz Armin Akbar",
+    materi: "Jejak Perjuangan dan Keteladanan Para Sahabat",
+    hari: "Ahad",
+    waktu: "Ba’da Magrib",
+    maps: "https://www.google.com/maps/search/?api=1&query=Masjid+As-Sunnah+VCM+Ciputat+Timur",
+    sumber: "https://majlis.id/locations/01ef3b80-e663-4f62-8514-d9af73488c8d"
+  }
+];
+
+    
+let selectedKajianCity = "";
+let selectedKajianDay = "";
+let selectedKajianTime = "";
+
+function selectKajianCity(city) {
+  selectedKajianCity = city;
+  selectedKajianDay = "";
+  selectedKajianTime = "";
+
+  document.querySelectorAll(".city-button").forEach((button) => {
+    button.classList.toggle(
+      "selected",
+      button.getAttribute("onclick").includes(`'${city}'`)
+    );
+  });
+
+  document.getElementById("kajian-day-area").hidden = false;
+  document.getElementById("kajian-time-area").hidden = true;
+  document.getElementById("kajian-mosque-list").innerHTML = "";
+
+  document.querySelectorAll(".day-button, .time-button").forEach((button) => {
+    button.classList.remove("selected");
+  });
+}
+
+function selectKajianDay(day) {
+  selectedKajianDay = day;
+  selectedKajianTime = "";
+
+  document.querySelectorAll(".day-button").forEach((button) => {
+    button.classList.toggle(
+      "selected",
+      button.textContent.trim() === day
+    );
+  });
+
+  document.getElementById("kajian-time-area").hidden = false;
+  document.getElementById("kajian-mosque-list").innerHTML = "";
+
+  document.querySelectorAll(".time-button").forEach((button) => {
+    button.classList.remove("selected");
+  });
+}
+
+function selectKajianTime(time) {
+  selectedKajianTime = time;
+
+  document.querySelectorAll(".time-button").forEach((button) => {
+    button.classList.toggle(
+      "selected",
+      button.getAttribute("onclick").includes(`'${time}'`)
+    );
+  });
+
+  document.getElementById("kajian-mosque-list").innerHTML =
+    `<p style="color:#cbd5e1;font-size:13px">
+      Pilihan: ${selectedKajianCity === "tangsel" ? "Tangerang Selatan" : "Jakarta"}
+      · ${selectedKajianDay} · ${selectedKajianTime}.
+      <br><br>Data masjid akan ditampilkan setelah kita menambahkan daftar kajian.
+    </p>`;
+}
+
 
   </script>
   
