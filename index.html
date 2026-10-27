@@ -1053,9 +1053,32 @@ function selectKajianTime(time) {
           <strong>${masjid.ustadz}</strong>
         </p>
 
-        <p class="mosque-material">
-          Materi: ${masjid.materi}
-        </p>
+        
+${(() => {
+  const materiAsli = masjid.materi
+    .replace(/\s*setiap bulan/gi, "");
+
+  const cocok = materiAsli.match(
+    /(?:khusus|hanya)\s+pekan\s+ke-\d+(?:\s+(?:dan|&)\s+ke-\d+)*/i
+  );
+
+  const materiBersih = materiAsli
+    .replace(cocok ? cocok[0] : "", "")
+    .replace(/\s*[—-]\s*$/, "")
+    .trim();
+
+  return `
+    <p class="mosque-material">
+      Materi: ${materiBersih}
+    </p>
+    ${cocok ? `
+      <p class="mosque-week">
+        ${cocok[0].toUpperCase()}
+      </p>
+    ` : ""}
+  `;
+})()}
+
 
         <p class="mosque-schedule">
   ${masjid.hari} · ${masjid.jam || (masjid.waktu + " - selesai")}
