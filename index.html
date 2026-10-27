@@ -1027,11 +1027,14 @@ function selectKajianTime(time) {
   renderKajianCards();
 }
 
+
 function renderKajianCards() {
   const wadah = document.getElementById("kajian-mosque-list");
+  const totalEl = document.getElementById("kajian-total");
 
   if (!selectedKajianCity) {
     wadah.innerHTML = "";
+    totalEl.hidden = true;
     return;
   }
 
@@ -1042,6 +1045,10 @@ function renderKajianCards() {
       (!selectedKajianTime || masjid.waktu === selectedKajianTime)
     );
   });
+
+  // Hitung dan tampilkan total kajian sesuai filter
+  totalEl.hidden = false;
+  totalEl.textContent = `Total kajian: ${hasil.length} kajian`;
 
   if (hasil.length === 0) {
     wadah.innerHTML = `
