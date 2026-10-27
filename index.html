@@ -1062,8 +1062,8 @@ function renderKajianCards() {
     const materiAsli = masjid.materi.replace(/\s*setiap bulan/gi, "");
 
     const cocok = materiAsli.match(
-      /(?:khusus|hanya)\s+pekan\s+ke-\d+(?:\s+(?:dan|&)\s+ke-\d+)*/i
-    );
+  /(?:khusus\s+)?pekan\s+ke-\d+(?:\s*(?:dan|&)\s*ke-\d+)*/i
+);
 
     const materiBersih = materiAsli
       .replace(cocok ? cocok[0] : "", "")
