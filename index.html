@@ -303,14 +303,31 @@ body.compact-view [data-prayer-fixed] p[style] {
   border-color: #d6bd7a;
 }
 
+
 #kajian-mosque-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   margin-top: 20px;
   align-items: stretch;
 }
 
+.mosque-card {
+  min-width: 0;
+  margin: 0;
+}
+
+@media (min-width: 600px) {
+  #kajian-mosque-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  #kajian-mosque-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
 
 @media (max-width: 360px) {
   .day-grid {
