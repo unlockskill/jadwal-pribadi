@@ -553,29 +553,32 @@ body.compact-view [data-prayer-fixed] p[style] {
     </button>
   </div>
 
-  <div id="kajian-day-area" hidden>
-    <h3 class="kajian-label">Pilih Hari</h3>
-    <div class="day-grid">
-      <button class="day-button" onclick="selectKajianDay('Ahad')">Ahad</button>
-      <button class="day-button" onclick="selectKajianDay('Senin')">Senin</button>
-      <button class="day-button" onclick="selectKajianDay('Selasa')">Selasa</button>
-      <button class="day-button" onclick="selectKajianDay('Rabu')">Rabu</button>
-      <button class="day-button" onclick="selectKajianDay('Kamis')">Kamis</button>
-      <button class="day-button" onclick="selectKajianDay('Jumat')">Jumat</button>
-      <button class="day-button" onclick="selectKajianDay('Sabtu')">Sabtu</button>
-    </div>
+  
+<div id="kajian-day-area" hidden>
+  <h3 class="kajian-label">Pilih Hari</h3>
+  <div class="day-grid">
+    <button class="day-button" data-day="" onclick="selectKajianDay('')">Semua Hari</button>
+    <button class="day-button" data-day="Ahad" onclick="selectKajianDay('Ahad')">Ahad</button>
+    <button class="day-button" data-day="Senin" onclick="selectKajianDay('Senin')">Senin</button>
+    <button class="day-button" data-day="Selasa" onclick="selectKajianDay('Selasa')">Selasa</button>
+    <button class="day-button" data-day="Rabu" onclick="selectKajianDay('Rabu')">Rabu</button>
+    <button class="day-button" data-day="Kamis" onclick="selectKajianDay('Kamis')">Kamis</button>
+    <button class="day-button" data-day="Jumat" onclick="selectKajianDay('Jumat')">Jumat</button>
+    <button class="day-button" data-day="Sabtu" onclick="selectKajianDay('Sabtu')">Sabtu</button>
   </div>
+</div>
 
-  <div id="kajian-time-area" hidden>
-    <h3 class="kajian-label">Pilih Waktu Kajian</h3>
-    <div class="time-grid">
-      <button class="time-button" onclick="selectKajianTime('Subuh')">Kajian Subuh</button>
-      <button class="time-button" onclick="selectKajianTime('Dhuha')">Kajian Dhuha</button>
-      <button class="time-button" onclick="selectKajianTime('Ba’da Dzuhur')">Ba’da Dzuhur</button>
-      <button class="time-button" onclick="selectKajianTime('Ba’da Ashar')">Ba’da Ashar</button>
-      <button class="time-button" onclick="selectKajianTime('Ba’da Magrib')">Ba’da Magrib</button>
-    </div>
+<div id="kajian-time-area" hidden>
+  <h3 class="kajian-label">Pilih Waktu Kajian</h3>
+  <div class="time-grid">
+    <button class="time-button" data-time="" onclick="selectKajianTime('')">Semua Waktu</button>
+    <button class="time-button" data-time="Subuh" onclick="selectKajianTime('Subuh')">Kajian Subuh</button>
+    <button class="time-button" data-time="Dhuha" onclick="selectKajianTime('Dhuha')">Kajian Dhuha</button>
+    <button class="time-button" data-time="Ba’da Dzuhur" onclick="selectKajianTime('Ba’da Dzuhur')">Ba’da Dzuhur</button>
+    <button class="time-button" data-time="Ba’da Ashar" onclick="selectKajianTime('Ba’da Ashar')">Ba’da Ashar</button>
+    <button class="time-button" data-time="Ba’da Magrib" onclick="selectKajianTime('Ba’da Magrib')">Ba’da Magrib</button>
   </div>
+</div>
 
   <div id="kajian-mosque-list"></div>
 </section>
@@ -960,6 +963,7 @@ const daftarMasjidKajian = [
   }
 ];
 
+
 let selectedKajianCity = "";
 let selectedKajianDay = "";
 let selectedKajianTime = "";
@@ -977,12 +981,13 @@ function selectKajianCity(city) {
   });
 
   document.getElementById("kajian-day-area").hidden = false;
-  document.getElementById("kajian-time-area").hidden = true;
-  document.getElementById("kajian-mosque-list").innerHTML = "";
+  document.getElementById("kajian-time-area").hidden = false;
 
   document.querySelectorAll(".day-button, .time-button").forEach((button) => {
     button.classList.remove("selected");
   });
+
+  renderKajianCards();
 }
 
 function selectKajianDay(day) {
@@ -990,137 +995,124 @@ function selectKajianDay(day) {
   selectedKajianTime = "";
 
   document.querySelectorAll(".day-button").forEach((button) => {
-    button.classList.toggle(
-      "selected",
-      button.textContent.trim() === day
-    );
+    button.classList.toggle("selected", button.dataset.day === day);
   });
-
-  document.getElementById("kajian-time-area").hidden = false;
-  document.getElementById("kajian-mosque-list").innerHTML = "";
 
   document.querySelectorAll(".time-button").forEach((button) => {
     button.classList.remove("selected");
   });
-}
 
+  renderKajianCards();
+}
 
 function selectKajianTime(time) {
   selectedKajianTime = time;
 
   document.querySelectorAll(".time-button").forEach((button) => {
-    button.classList.toggle(
-      "selected",
-      button.getAttribute("onclick").includes(`'${time}'`)
-    );
+    button.classList.toggle("selected", button.dataset.time === time);
   });
+
+  renderKajianCards();
+}
+
+function renderKajianCards() {
+  const wadah = document.getElementById("kajian-mosque-list");
+
+  if (!selectedKajianCity) {
+    wadah.innerHTML = "";
+    return;
+  }
 
   const hasil = daftarMasjidKajian.filter((masjid) => {
     return (
       masjid.kota === selectedKajianCity &&
-      masjid.hari === selectedKajianDay &&
-      masjid.waktu === selectedKajianTime
+      (!selectedKajianDay || masjid.hari === selectedKajianDay) &&
+      (!selectedKajianTime || masjid.waktu === selectedKajianTime)
     );
   });
-
-  const wadah = document.getElementById("kajian-mosque-list");
 
   if (hasil.length === 0) {
     wadah.innerHTML = `
       <p style="color:#cbd5e1;font-size:13px;line-height:1.6">
-        Belum ada data kajian untuk pilihan ini.
-        Data jadwal akan ditambahkan setelah dikonfirmasi.
+        Belum ada jadwal kajian untuk pilihan ini.
       </p>`;
     return;
   }
 
-  wadah.innerHTML = hasil.map((masjid) => `
-    <article class="mosque-card">
-      ${masjid.foto ? `
-        <img
-          class="mosque-photo"
-          src="${masjid.foto}"
-          alt="${masjid.nama}"
-          loading="lazy"
-        >
-      ` : ""}
+  wadah.innerHTML = hasil.map((masjid) => {
+    const materiAsli = masjid.materi.replace(/\s*setiap bulan/gi, "");
 
-      <div class="mosque-card-body">
-        <h3 class="mosque-name">${masjid.nama}</h3>
-        <p class="mosque-address">${masjid.alamat}</p>
+    const cocok = materiAsli.match(
+      /(?:khusus|hanya)\s+pekan\s+ke-\d+(?:\s+(?:dan|&)\s+ke-\d+)*/i
+    );
 
-        <p class="mosque-ustadz">
-          <strong>${masjid.ustadz}</strong>
-        </p>
+    const materiBersih = materiAsli
+      .replace(cocok ? cocok[0] : "", "")
+      .replace(/\s*[—-]\s*$/, "")
+      .trim();
 
-        
-${(() => {
-  const materiAsli = masjid.materi
-    .replace(/\s*setiap bulan/gi, "");
+    return `
+      <article class="mosque-card">
+        ${masjid.foto ? `
+          <img class="mosque-photo"
+               src="${masjid.foto}"
+               alt="${masjid.nama}"
+               loading="lazy">
+        ` : ""}
 
-  const cocok = materiAsli.match(
-    /(?:khusus|hanya)\s+pekan\s+ke-\d+(?:\s+(?:dan|&)\s+ke-\d+)*/i
-  );
+        <div class="mosque-card-body">
+          <h3 class="mosque-name">${masjid.nama}</h3>
+          <p class="mosque-address">${masjid.alamat}</p>
 
-  const materiBersih = materiAsli
-    .replace(cocok ? cocok[0] : "", "")
-    .replace(/\s*[—-]\s*$/, "")
-    .trim();
+          <p class="mosque-ustadz">
+            <strong>${masjid.ustadz}</strong>
+          </p>
 
-  return `
-    <p class="mosque-material">
-      Materi: ${materiBersih}
-    </p>
-    ${cocok ? `
-      <p class="mosque-week">
-        ${cocok[0].toUpperCase()}
-      </p>
-    ` : ""}
-  `;
-})()}
+          <p class="mosque-material">
+            Materi: ${materiBersih}
+          </p>
 
-
-        <p class="mosque-schedule">
-  ${masjid.hari} · ${masjid.jam || (masjid.waktu + " - selesai")}
-</p>
-
-        <div class="mosque-socials">
-          <a
-            href="${masjid.maps}"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Buka lokasi di Google Maps"
-            title="Google Maps"
-          >📍</a>
-
-          ${masjid.instagram ? `
-            <a
-              href="${masjid.instagram}"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Buka Instagram masjid"
-              title="Instagram"
-                        >
-              <svg xmlns="http://www.w3.org/2000/svg"
-                   width="18" height="18"
-                   viewBox="0 0 24 24"
-                   fill="none"
-                   stroke="#ffffff"
-                   stroke-width="1.8"
-                   stroke-linecap="round"
-                   stroke-linejoin="round"
-                   aria-hidden="true">
-                <rect x="3" y="3" width="18" height="18" rx="5"/>
-                <circle cx="12" cy="12" r="4"/>
-                <circle cx="18" cy="6" r="0.8" fill="#ffffff"/>
-              </svg>
-            </a>
+          ${cocok ? `
+            <p class="mosque-week">${cocok[0].toUpperCase()}</p>
           ` : ""}
-        </div>
-      </div>
-    </article>
 
-  `).join("");
+          <p class="mosque-schedule">
+            ${masjid.hari} · ${masjid.jam || (masjid.waktu + " - selesai")}
+          </p>
+
+          <div class="mosque-socials">
+            <a href="${masjid.maps}"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="Buka lokasi di Google Maps"
+               title="Google Maps">📍</a>
+
+            ${masjid.instagram ? `
+              <a href="${masjid.instagram}"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="Buka Instagram masjid"
+                 title="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="18" height="18"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="#ffffff"
+                     stroke-width="1.8"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="5"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <circle cx="18" cy="6" r="0.8" fill="#ffffff"/>
+                </svg>
+              </a>
+            ` : ""}
+          </div>
+        </div>
+      </article>
+    `;
+  }).join("");
 }
 
 
